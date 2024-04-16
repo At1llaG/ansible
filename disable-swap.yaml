@@ -1,0 +1,15 @@
+---
+- name: Disable Swap
+  hosts: your_target_servers
+  become: yes
+
+  tasks:
+    - name: Disable Swap
+      command: swapoff {{ swap_file }}
+      ignore_errors: yes
+
+    - name: Remove Swap File
+      file:
+        path: "{{ swap_file }}"
+        state: absent
+      ignore_errors: yes

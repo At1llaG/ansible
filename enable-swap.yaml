@@ -1,0 +1,21 @@
+---
+- name: Configure Swap
+  hosts: your_target_servers
+  become: yes
+
+  tasks:
+    - name: Create Swap File
+      command: fallocate -l {{ swap_size }} {{ swap_file }}
+      args:
+        creates: "{{ swap_file }}"
+      notify:
+        - Load Swap
+
+    - name: Set Up Swap
+      command: mkswap {{ swap_file }}
+      notify:
+        - Load Swap
+
+  handlers:
+    - name: Load Swap
+      command: swapon {{ swap_file }}
